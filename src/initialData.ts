@@ -58,7 +58,7 @@ export const backgrounds = [
 
 export const goalsData = [
   {
-    id: 1,
+    id: 0,
     title: 'For Smoothie',
     deadline: '25 May',
     goal: 112000,
@@ -66,7 +66,7 @@ export const goalsData = [
     backgroundIndex: 0,
   },
   {
-    id: 2,
+    id: 1,
     title: 'For Second Smoothie',
     deadline: '25 June',
     goal: 250000,

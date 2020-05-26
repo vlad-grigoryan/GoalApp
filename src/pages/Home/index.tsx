@@ -1,5 +1,13 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {View, ScrollView, Text, Modal, TouchableHighlight} from 'react-native';
+import {
+  View,
+  ScrollView,
+  Text,
+  Modal,
+  TouchableHighlight,
+  TextInputScrollEventData,
+  NativeSyntheticEvent,
+} from 'react-native';
 import {connect} from 'react-redux';
 
 import {increaseGoal, setSelectedGoal} from '../../redux/actions/goal.actions';
@@ -10,13 +18,22 @@ import AddingGoalButton from '../../components/AddingGoalButton';
 import styles from './styles';
 
 import {deviceWidth, goalItemWidth, centralizedWidth} from '../../utils';
+import {GoalBlock} from '../../interfaces';
 
-const Home = (props: any) => {
-  const scrollRef: any = useRef(null);
-  const [goals, setGoals] = useState(null);
-  const [editableGoal, setEditableGoal] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [showModal, setShowModal] = useState(false);
+export interface Props {
+  goal: {
+    goals: GoalBlock[];
+  };
+  increaseGoal: (selectedIndex: number) => void;
+  setSelectedGoal: (selectedGoal: GoalBlock, selectedIndex: number) => void;
+}
+
+const Home: React.FC<Props> = (props: Props) => {
+  const scrollRef = useRef<any>(null);
+  const [goals, setGoals] = useState<GoalBlock[] | null>(null);
+  const [editableGoal, setEditableGoal] = useState<boolean>(false);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [showModal, setShowModal] = useState<boolean>(false);
   useEffect(() => {
     if (props.goal.goals) {
       setGoals(props.goal.goals);
@@ -30,6 +47,7 @@ const Home = (props: any) => {
   const handlePlus = () => {
     props.increaseGoal(currentIndex);
     scrollRef &&
+      scrollRef.current &&
       scrollRef.current.scrollTo({
         x:
           currentIndex * goalItemWidth +
@@ -38,10 +56,11 @@ const Home = (props: any) => {
       });
   };
 
-  const openEditFormModal = (goal: any, index: number) => {
+  const openEditFormModal = (goal: GoalBlock, index: number) => {
     setShowModal(true);
     setEditableGoal(true);
     scrollRef &&
+      scrollRef.current &&
       scrollRef.current.scrollTo({
         x:
           index * goalItemWidth +
@@ -49,6 +68,18 @@ const Home = (props: any) => {
           (deviceWidth - goalItemWidth) / 2,
       });
     props.setSelectedGoal(goal, index);
+  };
+
+  const handleScrollGoalBlock = ({
+    nativeEvent,
+  }: NativeSyntheticEvent<TextInputScrollEventData>) => {
+    const newCurrentIndexGoal = Math.floor(
+      (nativeEvent.contentOffset.x + deviceWidth / 2 - centralizedWidth) /
+        goalItemWidth,
+    );
+    if (newCurrentIndexGoal !== currentIndex) {
+      setCurrentIndex(newCurrentIndexGoal);
+    }
   };
 
   return (
@@ -68,26 +99,16 @@ const Home = (props: any) => {
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           style={styles.scrollContainer}
-          onScroll={({
-            nativeEvent: {
-              contentOffset: {x},
-            },
-          }) => {
-            const newCurrentIndexGoal = Math.floor(
-              (x + deviceWidth / 2 - centralizedWidth) / goalItemWidth,
-            );
-            if (newCurrentIndexGoal !== currentIndex) {
-              setCurrentIndex(newCurrentIndexGoal);
-            }
-          }}
+          onScroll={handleScrollGoalBlock}
           ref={scrollRef}>
           <View style={styles.goalItems}>
             {goals &&
-              goals.map((goal, index) => (
+              goals.map((goalItem: GoalBlock, index: number) => (
                 <TouchableHighlight
+                  key={goalItem.id}
                   underlayColor={'transparent'}
-                  onPress={() => openEditFormModal(goal, index)}>
-                  <GoalItem {...goal} key={index} />
+                  onPress={() => openEditFormModal(goalItem, index)}>
+                  <GoalItem {...goalItem} key={index} />
                 </TouchableHighlight>
               ))}
           </View>
@@ -115,7 +136,7 @@ const Home = (props: any) => {
   // }
 };
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: {goal: {goals: GoalBlock[]}}) => {
   return {
     goal: state.goal,
   };

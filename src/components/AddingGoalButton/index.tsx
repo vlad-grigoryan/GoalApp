@@ -4,7 +4,10 @@ import React from 'react';
 import Mask from './../Mask';
 import styles from './styles';
 
-const AddingGoalButton = ({handlePlus}) => (
+interface Props {
+  handlePlus?: () => void;
+}
+const AddingGoalButton = ({handlePlus}: Props) => (
   <TouchableOpacity onPress={handlePlus}>
     <Mask style={styles.mask}>
       <View style={styles.addButton}>

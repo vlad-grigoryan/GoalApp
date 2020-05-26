@@ -20,8 +20,8 @@ const App = () => {
     <>
       <Provider store={store}>
         <StatusBar barStyle="dark-content" />
-        <SafeAreaView className={Styles.topContainer}>
-          <Home />
+        <SafeAreaView>
+          <Home className={Styles.topContainer} />
         </SafeAreaView>
       </Provider>
     </>

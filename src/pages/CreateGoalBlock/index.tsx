@@ -5,15 +5,14 @@ import {
   ScrollView,
   Text,
   TextInput,
-  Keyboard,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Background from './../../components/Background';
-import Mask from './../Mask';
+import Background from '../../components/Background';
+import Mask from '../../components/Mask';
 import styles from './styles';
-import {backgrounds} from '../../initialData';
+import {backgrounds, goalsData} from '../../initialData';
 import {
   addGoal,
   editGoal,
@@ -21,35 +20,29 @@ import {
   removeGoal,
 } from '../../redux/actions/goal.actions';
 import {connect} from 'react-redux';
+import {GoalBlock} from '../../interfaces';
 
-const initialNewGoal = {
-  title: 'New goal',
-  deadline: 'tomorrow',
-  goal: '25000',
-};
+interface Props {
+  goal: {
+    selectedGoal: GoalBlock;
+    selectedIndex: number;
+  };
+  editableGoal: boolean;
+  editGoal: (goalBlock: GoalBlock) => void;
+  addGoal: (goalBlock: GoalBlock) => void;
+  removeGoal: (selectedGoalIndex: number) => void;
+  setModalVisibility: (visibility: boolean) => void;
+  changeGoalBackground: (bgIndex: number, selectedIndex: number) => void;
+}
 
-const GoalForm = (props: any) => {
-  let keyboardDidShowListener;
-  const [newGoal, setNewGoal] = useState<{
-    title: string;
-    deadline: string;
-    goal: string;
-  }>(initialNewGoal);
-  const [currentField, setCurrentField] = useState<string | null>(null);
+const CreateGoalBlock = (props: Props) => {
+  const [newGoal, setNewGoal] = useState<GoalBlock>(goalsData[0]);
   const [backgroundIndex, setBackgroundIndex] = useState<number>(0);
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {});
-    return () => {
-      keyboardDidShowListener.remove();
-    };
-  }, []);
-  useEffect(() => {
     if (props.goal.selectedGoal && props.editableGoal) {
       setNewGoal(props.goal.selectedGoal);
-      setCurrentField(props.goal.selectedGoal.current);
     }
     if (props.goal.selectedIndex) {
       setSelectedIndex(props.goal.selectedIndex);
@@ -57,7 +50,7 @@ const GoalForm = (props: any) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.goal]);
 
-  const handleFieldChange = (fieldName, value) => {
+  const handleFieldChange = (fieldName: string, value: number) => {
     setNewGoal({
       ...newGoal,
       [fieldName]: value,
@@ -104,7 +97,7 @@ const GoalForm = (props: any) => {
       </View>
       <View style={styles.formSection}>
         <TextInput
-          onChangeText={(text) => handleFieldChange('title', text)}
+          onChangeText={(text) => handleFieldChange('title', Number(text))}
           value={newGoal.title}
           style={styles.formFieldInput}
         />
@@ -137,65 +130,41 @@ const GoalForm = (props: any) => {
         </ScrollView>
       </View>
       <View style={styles.formSection}>
-        {currentField === 'deadline' ? (
-          <TextInput
-            onChangeText={(text) => handleFieldChange('deadline', text)}
-            value={newGoal.deadline}
-            ref={(ref) => ref && ref.focus()}
-            onBlur={() => setCurrentField(null)}
-            style={styles.formFieldInput}
-          />
-        ) : (
-          <TouchableOpacity
-            style={styles.formField}
-            onPress={() => setCurrentField('deadline')}>
-            <View style={styles.formFieldGroup}>
-              <Mask style={styles.formFieldIconMask}>
-                <Ionicon style={styles.formFieldIcon} name="ios-timer" />
-              </Mask>
-              <Text style={styles.formFieldTitle}>Until</Text>
-            </View>
-            <View style={styles.formFieldGroup}>
-              <Text style={styles.formFieldValue}>{newGoal.deadline}</Text>
-              <MaterialIcon
-                style={styles.formFieldChevron}
-                name="chevron-right"
-              />
-            </View>
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity style={styles.formField}>
+          <View style={styles.formFieldGroup}>
+            <Mask style={styles.formFieldIconMask}>
+              <Ionicon style={styles.formFieldIcon} name="ios-timer" />
+            </Mask>
+            <Text style={styles.formFieldTitle}>Until</Text>
+          </View>
+          <View style={styles.formFieldGroup}>
+            <Text style={styles.formFieldValue}>{newGoal.deadline}</Text>
+            <MaterialIcon
+              style={styles.formFieldChevron}
+              name="chevron-right"
+            />
+          </View>
+        </TouchableOpacity>
       </View>
       <View style={styles.formSection}>
-        {currentField === 'goal' ? (
-          <TextInput
-            onChangeText={(text) => handleFieldChange('goal', text)}
-            value={newGoal.goal}
-            ref={(ref) => ref && ref.focus()}
-            onBlur={() => setCurrentField(null)}
-            style={styles.formFieldInput}
-          />
-        ) : (
-          <TouchableOpacity
-            style={styles.formField}
-            onPress={() => setCurrentField('goal')}>
-            <View style={styles.formFieldGroup}>
-              <Mask style={styles.formFieldIconMask}>
-                <MaterialIcon
-                  style={styles.formFieldIcon}
-                  name="flag-variant-outline"
-                />
-              </Mask>
-              <Text style={styles.formFieldTitle}>Goal</Text>
-            </View>
-            <View style={styles.formFieldGroup}>
-              <Text style={styles.formFieldValue}>${newGoal.goal}</Text>
+        <TouchableOpacity style={styles.formField}>
+          <View style={styles.formFieldGroup}>
+            <Mask style={styles.formFieldIconMask}>
               <MaterialIcon
-                style={styles.formFieldChevron}
-                name="chevron-right"
+                style={styles.formFieldIcon}
+                name="flag-variant-outline"
               />
-            </View>
-          </TouchableOpacity>
-        )}
+            </Mask>
+            <Text style={styles.formFieldTitle}>Goal</Text>
+          </View>
+          <View style={styles.formFieldGroup}>
+            <Text style={styles.formFieldValue}>${newGoal.goal}</Text>
+            <MaterialIcon
+              style={styles.formFieldChevron}
+              name="chevron-right"
+            />
+          </View>
+        </TouchableOpacity>
       </View>
       <TouchableOpacity style={styles.bottomSection} onPress={handleRemoveItem}>
         <Icon name="trash-o" style={styles.deleteIcon} />
@@ -216,4 +185,4 @@ const mapActionsToProps = {
   removeGoal,
 };
 
-export default connect(mapStateToProps, mapActionsToProps)(GoalForm);
+export default connect(mapStateToProps, mapActionsToProps)(CreateGoalBlock);

@@ -2,17 +2,16 @@ import React, {useEffect, useRef, useState} from 'react';
 import {View, ScrollView, Text, Modal} from 'react-native';
 import {connect} from 'react-redux';
 
-import {increaseGoal, setSelectedGoal} from '../../redux/actions/goal.actions';
 import Header from '../../components/Header';
-import GoalForm from '../../components/GoalForm';
+import CreateGoalBlock from '../CreateGoalBlock';
+import GoalBlockList from '../../components/GoalBlockList/GoalBlockList';
 import AddingGoalButton from '../../components/AddingGoalButton';
-import styles from './styles';
-
+import {increaseGoal, setSelectedGoal} from '../../redux/actions/goal.actions';
 import {deviceWidth, goalItemWidth, centralizedWidth} from '../../utils';
 import {GoalBlock} from '../../interfaces';
-import GoalBlockList from '../../components/GoalBlockList/GoalBlockList';
+import styles from './styles';
 
-export interface Props {
+interface Props {
   goal: {
     goals: GoalBlock[];
   };
@@ -90,7 +89,7 @@ const Home: React.FC<Props> = (props: Props) => {
           onRequestClose={() => setModalVisibility(false)}>
           <View style={styles.modalBody}>
             <ScrollView>
-              <GoalForm
+              <CreateGoalBlock
                 editableGoal={editableGoal}
                 setModalVisibility={setModalVisibility}
               />

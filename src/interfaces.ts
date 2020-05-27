@@ -25,3 +25,18 @@ export interface GoalBlock {
   current: number;
   backgroundIndex: number;
 }
+interface Background {
+  colors: string[];
+  start: {
+    x: number;
+    y: number;
+  };
+  end: {
+    x: number;
+    y: number;
+  };
+}
+
+export interface BackgroundModel {
+  layers: Background[];
+}

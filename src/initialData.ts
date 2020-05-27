@@ -1,4 +1,6 @@
-export const backgrounds = [
+import {Background} from './interfaces';
+
+export const backgrounds: Background[] = [
   {
     layers: [
       {

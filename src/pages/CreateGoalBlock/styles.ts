@@ -52,6 +52,8 @@ const styles = StyleSheet.create({
   },
   formFieldValue: {
     color: '#A6A6AB',
+    width: 120,
+    textAlign: 'right',
     fontSize: 17,
     lineHeight: 22,
     letterSpacing: -0.4,
@@ -88,6 +90,9 @@ const styles = StyleSheet.create({
     padding: 0,
     letterSpacing: -0.4,
     color: '#121212',
+  },
+  formFieldSecondRow: {
+    flexDirection: 'row',
   },
   formSubmit: {
     fontSize: 17,

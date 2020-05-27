@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -36,7 +36,11 @@ interface Props {
 }
 
 const CreateGoalBlock = (props: Props) => {
+  const goalTextInputRef = useRef<TextInput>(null);
   const [newGoal, setNewGoal] = useState<GoalBlock>(goalsData[0]);
+  const [goalValue, setGoalValue] = useState<string>(
+    goalsData[0].goal.toString(),
+  );
   const [backgroundIndex, setBackgroundIndex] = useState<number>(0);
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
@@ -82,6 +86,11 @@ const CreateGoalBlock = (props: Props) => {
       props.changeGoalBackground(bgIndex, selectedIndex);
     }
   }
+  const handleGoalPress = () => {
+    if (goalTextInputRef && goalTextInputRef.current) {
+      goalTextInputRef.current.focus();
+    }
+  };
 
   return (
     <>
@@ -147,7 +156,7 @@ const CreateGoalBlock = (props: Props) => {
         </TouchableOpacity>
       </View>
       <View style={styles.formSection}>
-        <TouchableOpacity style={styles.formField}>
+        <TouchableOpacity style={styles.formField} onPress={handleGoalPress}>
           <View style={styles.formFieldGroup}>
             <Mask style={styles.formFieldIconMask}>
               <MaterialIcon
@@ -157,8 +166,14 @@ const CreateGoalBlock = (props: Props) => {
             </Mask>
             <Text style={styles.formFieldTitle}>Goal</Text>
           </View>
-          <View style={styles.formFieldGroup}>
-            <Text style={styles.formFieldValue}>${newGoal.goal}</Text>
+          <View style={styles.formFieldSecondRow}>
+            <TextInput
+              style={styles.formFieldValue}
+              keyboardType="decimal-pad"
+              ref={goalTextInputRef}
+              onChangeText={setGoalValue}
+              value={goalValue}
+            />
             <MaterialIcon
               style={styles.formFieldChevron}
               name="chevron-right"

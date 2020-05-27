@@ -1,24 +1,16 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {
-  View,
-  ScrollView,
-  Text,
-  Modal,
-  TouchableHighlight,
-  TextInputScrollEventData,
-  NativeSyntheticEvent,
-} from 'react-native';
+import {View, ScrollView, Text, Modal} from 'react-native';
 import {connect} from 'react-redux';
 
 import {increaseGoal, setSelectedGoal} from '../../redux/actions/goal.actions';
 import Header from '../../components/Header';
-import GoalItem from './../../components/GoaItem';
 import GoalForm from '../../components/GoalForm';
 import AddingGoalButton from '../../components/AddingGoalButton';
 import styles from './styles';
 
 import {deviceWidth, goalItemWidth, centralizedWidth} from '../../utils';
 import {GoalBlock} from '../../interfaces';
+import GoalBlockList from '../../components/GoalBlockList/GoalBlockList';
 
 export interface Props {
   goal: {
@@ -70,18 +62,6 @@ const Home: React.FC<Props> = (props: Props) => {
     props.setSelectedGoal(goal, index);
   };
 
-  const handleScrollGoalBlock = ({
-    nativeEvent,
-  }: NativeSyntheticEvent<TextInputScrollEventData>) => {
-    const newCurrentIndexGoal = Math.floor(
-      (nativeEvent.contentOffset.x + deviceWidth / 2 - centralizedWidth) /
-        goalItemWidth,
-    );
-    if (newCurrentIndexGoal !== currentIndex) {
-      setCurrentIndex(newCurrentIndexGoal);
-    }
-  };
-
   return (
     <View style={styles.container}>
       {!showModal && (
@@ -93,27 +73,15 @@ const Home: React.FC<Props> = (props: Props) => {
         />
       )}
       {!showModal && <Text style={styles.title}>Financial Goals</Text>}
-      <View>
-        <ScrollView
-          scrollEventThrottle={16}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          style={styles.scrollContainer}
-          onScroll={handleScrollGoalBlock}
-          ref={scrollRef}>
-          <View style={styles.goalItems}>
-            {goals &&
-              goals.map((goalItem: GoalBlock, index: number) => (
-                <TouchableHighlight
-                  key={goalItem.id}
-                  underlayColor={'transparent'}
-                  onPress={() => openEditFormModal(goalItem, index)}>
-                  <GoalItem {...goalItem} key={index} />
-                </TouchableHighlight>
-              ))}
-          </View>
-        </ScrollView>
-      </View>
+      {goals && (
+        <GoalBlockList
+          currentIndex={currentIndex}
+          setCurrentIndex={setCurrentIndex}
+          openEditFormModal={openEditFormModal}
+          scrollRef={scrollRef}
+          goalBlocks={goals}
+        />
+      )}
       <View style={styles.bottomContainer}>
         <Modal
           animationType="slide"

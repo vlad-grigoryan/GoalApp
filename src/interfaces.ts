@@ -20,7 +20,7 @@ export interface ReducerState {
 export interface GoalBlock {
   id: number;
   title: string;
-  deadline: string;
+  deadline: Date;
   goal: number;
   current: number;
   backgroundIndex: number;

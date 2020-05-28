@@ -6,3 +6,8 @@ export const goalItemWidth = deviceWidth * 0.75;
 export const goalItemHeight = deviceHeight * 0.5;
 export const goalItemWrapper = deviceHeight * 0.9;
 export const centralizedWidth = (deviceWidth - goalItemWidth) / 2;
+export const formatDate = (date: Date) => {
+  const day = new Date(date).getDate();
+  const month = new Date(date).toLocaleString('default', {month: 'long'});
+  return `${day} ${month}`;
+};

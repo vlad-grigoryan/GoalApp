@@ -1,18 +1,9 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {
-  View,
-  TouchableOpacity,
-  ScrollView,
-  Text,
-  TextInput,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, TouchableOpacity, Text, TextInput} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Ionicon from 'react-native-vector-icons/Ionicons';
-import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Background from '../../components/Background';
 import Mask from '../../components/Mask';
 import styles from './styles';
-import {backgrounds, goalsData} from '../../initialData';
+import {goalsData} from '../../initialData';
 import {
   addGoal,
   editGoal,
@@ -21,6 +12,9 @@ import {
 } from '../../redux/actions/goal.actions';
 import {connect} from 'react-redux';
 import {GoalBlock} from '../../interfaces';
+import GoalTextInput from '../../components/GoalTextInput';
+import GoalDateModal from '../../components/GoalDateModal';
+import BackgroundList from '../../components/BackgroundList';
 
 interface Props {
   goal: {
@@ -36,12 +30,12 @@ interface Props {
 }
 
 const CreateGoalBlock = (props: Props) => {
-  const goalTextInputRef = useRef<TextInput>(null);
   const [newGoal, setNewGoal] = useState<GoalBlock>(goalsData[0]);
+  const [deadlineDate, setDeadlineDate] = useState(newGoal.deadline);
   const [goalValue, setGoalValue] = useState<string>(
     goalsData[0].goal.toString(),
   );
-  const [backgroundIndex, setBackgroundIndex] = useState<number>(0);
+  const [bgIndex, setBgIndex] = useState<number>(0);
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
   useEffect(() => {
@@ -64,7 +58,7 @@ const CreateGoalBlock = (props: Props) => {
   const handleSubmit = () => {
     const selectedGoal = {
       ...newGoal,
-      backgroundIndex,
+      bgIndex,
     };
     if (props.editableGoal) {
       props.editGoal(selectedGoal);
@@ -80,18 +74,12 @@ const CreateGoalBlock = (props: Props) => {
     props.setModalVisibility(false);
   };
 
-  function handleBackgroundChange(bgIndex: number) {
-    setBackgroundIndex(bgIndex);
+  const bgChange = (index: number) => {
+    setBgIndex(index);
     if (props.editableGoal) {
-      props.changeGoalBackground(bgIndex, selectedIndex);
-    }
-  }
-  const handleGoalPress = () => {
-    if (goalTextInputRef && goalTextInputRef.current) {
-      goalTextInputRef.current.focus();
+      props.changeGoalBackground(index, selectedIndex);
     }
   };
-
   return (
     <>
       <View style={styles.formTopSection}>
@@ -111,76 +99,9 @@ const CreateGoalBlock = (props: Props) => {
           style={styles.formFieldInput}
         />
       </View>
-      <View style={styles.formSection}>
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          style={styles.backgroundsSelector}>
-          <View style={styles.backgroundItems}>
-            {backgrounds.map((background, index) => (
-              <TouchableOpacity
-                key={index}
-                style={styles.backgroundItem}
-                onPress={() => {
-                  handleBackgroundChange(index);
-                }}>
-                <View key={index} style={styles.backgroundItemCircle}>
-                  <Background {...background} />
-                </View>
-                {index === backgroundIndex && (
-                  <MaterialIcon
-                    style={styles.backgroundItemIcon}
-                    name="check-circle"
-                  />
-                )}
-              </TouchableOpacity>
-            ))}
-          </View>
-        </ScrollView>
-      </View>
-      <View style={styles.formSection}>
-        <TouchableOpacity style={styles.formField}>
-          <View style={styles.formFieldGroup}>
-            <Mask style={styles.formFieldIconMask}>
-              <Ionicon style={styles.formFieldIcon} name="ios-timer" />
-            </Mask>
-            <Text style={styles.formFieldTitle}>Until</Text>
-          </View>
-          <View style={styles.formFieldGroup}>
-            <Text style={styles.formFieldValue}>{newGoal.deadline}</Text>
-            <MaterialIcon
-              style={styles.formFieldChevron}
-              name="chevron-right"
-            />
-          </View>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.formSection}>
-        <TouchableOpacity style={styles.formField} onPress={handleGoalPress}>
-          <View style={styles.formFieldGroup}>
-            <Mask style={styles.formFieldIconMask}>
-              <MaterialIcon
-                style={styles.formFieldIcon}
-                name="flag-variant-outline"
-              />
-            </Mask>
-            <Text style={styles.formFieldTitle}>Goal</Text>
-          </View>
-          <View style={styles.formFieldSecondRow}>
-            <TextInput
-              style={styles.formFieldValue}
-              keyboardType="decimal-pad"
-              ref={goalTextInputRef}
-              onChangeText={setGoalValue}
-              value={goalValue}
-            />
-            <MaterialIcon
-              style={styles.formFieldChevron}
-              name="chevron-right"
-            />
-          </View>
-        </TouchableOpacity>
-      </View>
+      <BackgroundList bgChange={bgChange} bgIndex={bgIndex} />
+      <GoalDateModal handleConfirm={setDeadlineDate} deadline={deadlineDate} />
+      <GoalTextInput setGoalValue={setGoalValue} goalValue={goalValue} />
       <TouchableOpacity style={styles.bottomSection} onPress={handleRemoveItem}>
         <Icon name="trash-o" style={styles.deleteIcon} />
       </TouchableOpacity>

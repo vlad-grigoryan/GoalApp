@@ -62,7 +62,7 @@ export const goalsData = [
   {
     id: 0,
     title: 'For Smoothie',
-    deadline: '25 May',
+    deadline: new Date(),
     goal: 112000,
     current: 98000,
     backgroundIndex: 0,
@@ -70,7 +70,7 @@ export const goalsData = [
   {
     id: 1,
     title: 'For Second Smoothie',
-    deadline: '25 June',
+    deadline: new Date(),
     goal: 250000,
     current: 52000,
     backgroundIndex: 1,

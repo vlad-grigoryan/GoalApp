@@ -5,6 +5,7 @@ import {AnimatedCircularProgress} from 'react-native-circular-progress';
 import Background from './../Background';
 import styles from './styles';
 import {backgrounds} from '../../initialData';
+import {formatDate} from '../../utils';
 
 const GoalItem = ({title, deadline, current, goal, backgroundIndex}) => {
   return (
@@ -13,7 +14,7 @@ const GoalItem = ({title, deadline, current, goal, backgroundIndex}) => {
         <Background {...backgrounds[backgroundIndex]} />
         <View style={styles.deadline}>
           <Icon name="piggy-bank" style={styles.deadlineIcon} />
-          <Text style={styles.deadlineText}>until {deadline}</Text>
+          <Text style={styles.deadlineText}>until {formatDate(deadline)}</Text>
         </View>
         <View>
           <Text style={styles.title}>{title}</Text>

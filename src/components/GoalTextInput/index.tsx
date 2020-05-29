@@ -9,7 +9,7 @@ interface Props {
   goalValue: string;
 }
 const GoalTextInput = ({setGoalValue, goalValue}: Props) => {
-  const goalTextInputRef = useRef<TextInput>();
+  const goalTextInputRef: any = useRef<TextInput>();
   const handleGoalPress = () => {
     if (goalTextInputRef && goalTextInputRef.current) {
       goalTextInputRef.current.focus();

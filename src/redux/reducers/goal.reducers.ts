@@ -6,11 +6,15 @@ import {
   CHANGE_SELECTED_GOAL_BACKGROUND,
   DELETE_GOAL,
 } from '../types';
-import {ReducerAction, ReducerState, GoalBlock} from '../../interfaces';
+import {
+  ReducerAction,
+  ReducerState,
+  GoalBlockInterface,
+} from '../../interfaces';
 
 export const initialState = {
-  goals: [] as GoalBlock[],
-  selectedGoal: {} as GoalBlock,
+  goals: [] as GoalBlockInterface[],
+  selectedGoal: {} as GoalBlockInterface,
   selectedIndex: 0,
 };
 
@@ -23,7 +27,6 @@ export const GoalReducer: (
 ) => {
   switch (action.type) {
     case INCREASE_GOAL: {
-      console.log(state.goals, 'state.goals');
       return {
         ...state,
         goals: [
@@ -67,7 +70,7 @@ export const GoalReducer: (
           ...state.goals.slice(0, action.payload.selectedIndex),
           {
             ...state.goals[action.payload.selectedIndex],
-            backgroundIndex: action.payload.backgroundIndex,
+            bgIndex: action.payload.bgIndex,
           },
           ...state.goals.slice(action.payload.selectedIndex + 1),
         ],

@@ -1,6 +1,6 @@
-import {Background} from './interfaces';
+import {BackgroundModel} from './interfaces';
 
-export const backgrounds: Background[] = [
+export const backgrounds: BackgroundModel[] = [
   {
     layers: [
       {
@@ -65,7 +65,7 @@ export const goalsData = [
     deadline: new Date(),
     goal: 112000,
     current: 98000,
-    backgroundIndex: 0,
+    bgIndex: 0,
   },
   {
     id: 1,
@@ -73,6 +73,15 @@ export const goalsData = [
     deadline: new Date(),
     goal: 250000,
     current: 52000,
-    backgroundIndex: 1,
+    bgIndex: 1,
   },
 ];
+
+export const initialGoal = {
+  id: 0,
+  title: 'new Goal',
+  deadline: new Date(),
+  goal: 5000,
+  current: 0,
+  bgIndex: 0,
+};

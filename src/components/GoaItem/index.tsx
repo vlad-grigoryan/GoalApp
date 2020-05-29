@@ -6,12 +6,19 @@ import Background from './../Background';
 import styles from './styles';
 import {backgrounds} from '../../initialData';
 import {formatDate} from '../../utils';
+import {GoalBlockInterface} from '../../interfaces';
 
-const GoalItem = ({title, deadline, current, goal, backgroundIndex}) => {
+const GoalBlock = ({
+  title,
+  deadline,
+  current,
+  goal,
+  bgIndex,
+}: GoalBlockInterface) => {
   return (
     <View style={styles.itemWrapper}>
       <View style={styles.item}>
-        <Background {...backgrounds[backgroundIndex]} />
+        <Background {...backgrounds[bgIndex]} />
         <View style={styles.deadline}>
           <Icon name="piggy-bank" style={styles.deadlineIcon} />
           <Text style={styles.deadlineText}>until {formatDate(deadline)}</Text>
@@ -23,7 +30,7 @@ const GoalItem = ({title, deadline, current, goal, backgroundIndex}) => {
           <AnimatedCircularProgress
             size={108}
             width={12}
-            fill={parseInt(goal) ? (current / goal) * 100 : 0}
+            fill={goal ? (current / goal) * 100 : 0}
             rotation={0}
             lineCap="round"
             tintColor="white"
@@ -45,4 +52,4 @@ const GoalItem = ({title, deadline, current, goal, backgroundIndex}) => {
   );
 };
 
-export default GoalItem;
+export default GoalBlock;

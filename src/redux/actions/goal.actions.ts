@@ -7,7 +7,7 @@ import {
   CHANGE_SELECTED_GOAL_BACKGROUND,
 } from '../types';
 import {Dispatch} from 'redux';
-import {GoalBlock} from '../../interfaces';
+import {GoalBlockInterface} from '../../interfaces';
 
 export const increaseGoal = (selectedIndex: number) => (dispatch: Dispatch) => {
   dispatch({
@@ -17,7 +17,7 @@ export const increaseGoal = (selectedIndex: number) => (dispatch: Dispatch) => {
 };
 
 export const setSelectedGoal = (
-  selectedGoal: GoalBlock,
+  selectedGoal: GoalBlockInterface,
   selectedIndex: number,
 ) => (dispatch: Dispatch) => {
   dispatch({
@@ -26,26 +26,30 @@ export const setSelectedGoal = (
   });
 };
 
-export const addGoal = (selectedGoal: GoalBlock) => (dispatch: Dispatch) => {
+export const addGoal = (selectedGoal: GoalBlockInterface) => (
+  dispatch: Dispatch,
+) => {
   dispatch({
     type: ADD_GOAL,
     payload: selectedGoal,
   });
 };
 
-export const editGoal = (selectedGoal: GoalBlock) => (dispatch: Dispatch) => {
+export const editGoal = (selectedGoal: GoalBlockInterface) => (
+  dispatch: Dispatch,
+) => {
   dispatch({
     type: EDIT_GOAL,
     payload: selectedGoal,
   });
 };
 export const changeGoalBackground = (
-  backgroundIndex: number,
+  bgIndex: number,
   selectedIndex: number,
 ) => (dispatch: Dispatch) => {
   dispatch({
     type: CHANGE_SELECTED_GOAL_BACKGROUND,
-    payload: {backgroundIndex, selectedIndex},
+    payload: {bgIndex, selectedIndex},
   });
 };
 

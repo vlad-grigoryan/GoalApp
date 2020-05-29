@@ -8,20 +8,23 @@ import GoalBlockList from '../../components/GoalBlockList/GoalBlockList';
 import AddingGoalButton from '../../components/AddingGoalButton';
 import {increaseGoal, setSelectedGoal} from '../../redux/actions/goal.actions';
 import {deviceWidth, goalItemWidth, centralizedWidth} from '../../utils';
-import {GoalBlock} from '../../interfaces';
+import {GoalBlockInterface} from '../../interfaces';
 import styles from './styles';
 
 interface Props {
   goal: {
-    goals: GoalBlock[];
+    goals: GoalBlockInterface[];
   };
   increaseGoal: (selectedIndex: number) => void;
-  setSelectedGoal: (selectedGoal: GoalBlock, selectedIndex: number) => void;
+  setSelectedGoal: (
+    selectedGoal: GoalBlockInterface,
+    selectedIndex: number,
+  ) => void;
 }
 
 const Home: React.FC<Props> = (props: Props) => {
   const scrollRef = useRef<any>(null);
-  const [goals, setGoals] = useState<GoalBlock[] | null>(null);
+  const [goals, setGoals] = useState<GoalBlockInterface[] | null>(null);
   const [editableGoal, setEditableGoal] = useState<boolean>(false);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -47,7 +50,7 @@ const Home: React.FC<Props> = (props: Props) => {
       });
   };
 
-  const openEditFormModal = (goal: GoalBlock, index: number) => {
+  const openEditFormModal = (goal: GoalBlockInterface, index: number) => {
     setShowModal(true);
     setEditableGoal(true);
     scrollRef &&
@@ -103,7 +106,7 @@ const Home: React.FC<Props> = (props: Props) => {
   // }
 };
 
-const mapStateToProps = (state: {goal: {goals: GoalBlock[]}}) => {
+const mapStateToProps = (state: {goal: {goals: GoalBlockInterface[]}}) => {
   return {
     goal: state.goal,
   };

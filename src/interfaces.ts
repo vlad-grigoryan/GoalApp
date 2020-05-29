@@ -12,18 +12,18 @@ export interface ReducerAction {
 }
 
 export interface ReducerState {
-  goals: GoalBlock[];
-  selectedGoal: GoalBlock;
+  goals: GoalBlockInterface[];
+  selectedGoal: GoalBlockInterface;
   selectedIndex: number;
 }
 
-export interface GoalBlock {
+export interface GoalBlockInterface {
   id: number;
   title: string;
   deadline: Date;
   goal: number;
   current: number;
-  backgroundIndex: number;
+  bgIndex: number;
 }
 interface Background {
   colors: string[];

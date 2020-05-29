@@ -2,7 +2,10 @@ import React from 'react';
 import {Text, View, TouchableHighlight} from 'react-native';
 import styles from './styles';
 
-const Header = ({addGoal}) => {
+interface Props {
+  addGoal: () => void;
+}
+const Header = ({addGoal}: Props) => {
   return (
     <>
       <View style={styles.headerContainer}>

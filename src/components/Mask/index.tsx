@@ -1,8 +1,12 @@
 import MaskedView from '@react-native-community/masked-view';
-import React from 'react';
+import React, {ReactElement} from 'react';
 import Background from './../Background';
 
-const Mask = ({children, style = {}}) => (
+interface Props {
+  children: ReactElement;
+  style: any;
+}
+const Mask = ({children, style = {}}: Props) => (
   <MaskedView style={style} maskElement={children}>
     <Background
       layers={[

@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {View, TouchableOpacity, Text, TextInput} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Mask from '../../components/Mask';
 import styles from './styles';
-import {goalsData} from '../../initialData';
+import {initialGoal} from '../../initialData';
 import {
   addGoal,
   editGoal,
@@ -11,32 +10,40 @@ import {
   removeGoal,
 } from '../../redux/actions/goal.actions';
 import {connect} from 'react-redux';
-import {GoalBlock} from '../../interfaces';
+import {GoalBlockInterface} from '../../interfaces';
 import GoalTextInput from '../../components/GoalTextInput';
 import GoalDateModal from '../../components/GoalDateModal';
 import BackgroundList from '../../components/BackgroundList';
+import NameTextInput from '../../components/NameTextInput';
+import GoalModalHeader from '../../components/GoalModalHeader';
 
 interface Props {
   goal: {
-    selectedGoal: GoalBlock;
+    selectedGoal: GoalBlockInterface;
+    goals: GoalBlockInterface[];
     selectedIndex: number;
   };
   editableGoal: boolean;
-  editGoal: (goalBlock: GoalBlock) => void;
-  addGoal: (goalBlock: GoalBlock) => void;
+  editGoal: (goalBlock: GoalBlockInterface) => void;
+  addGoal: (goalBlock: GoalBlockInterface) => void;
   removeGoal: (selectedGoalIndex: number) => void;
   setModalVisibility: (visibility: boolean) => void;
   changeGoalBackground: (bgIndex: number, selectedIndex: number) => void;
 }
 
 const CreateGoalBlock = (props: Props) => {
-  const [newGoal, setNewGoal] = useState<GoalBlock>(goalsData[0]);
-  const [deadlineDate, setDeadlineDate] = useState(newGoal.deadline);
+  const selectedGoalData = props.editableGoal
+    ? props.goal.selectedGoal
+    : initialGoal;
+
+  const [newGoal, setNewGoal] = useState<GoalBlockInterface>(selectedGoalData);
+  const [deadlineDate, setDeadlineDate] = useState(selectedGoalData.deadline);
   const [goalValue, setGoalValue] = useState<string>(
-    goalsData[0].goal.toString(),
+    selectedGoalData.goal.toString(),
   );
   const [bgIndex, setBgIndex] = useState<number>(0);
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const [title, setTitle] = useState<string>(selectedGoalData.title);
 
   useEffect(() => {
     if (props.goal.selectedGoal && props.editableGoal) {
@@ -48,24 +55,20 @@ const CreateGoalBlock = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.goal]);
 
-  const handleFieldChange = (fieldName: string, value: number) => {
-    setNewGoal({
-      ...newGoal,
-      [fieldName]: value,
-    });
-  };
-
   const handleSubmit = () => {
     const selectedGoal = {
       ...newGoal,
-      bgIndex,
+      bgIndex: bgIndex,
+      title,
+      goal: Number(goalValue),
+      deadline: deadlineDate,
     };
     if (props.editableGoal) {
       props.editGoal(selectedGoal);
     } else {
+      selectedGoal.id = props.goal.goals.length;
       props.addGoal(selectedGoal);
     }
-
     props.setModalVisibility(false);
   };
 
@@ -82,23 +85,8 @@ const CreateGoalBlock = (props: Props) => {
   };
   return (
     <>
-      <View style={styles.formTopSection}>
-        <View style={styles.formField}>
-          <Text style={styles.formTitle}>Financial</Text>
-          <TouchableOpacity onPress={handleSubmit}>
-            <Mask style={styles.formSubmitMask}>
-              <Text style={styles.formSubmit}>Done</Text>
-            </Mask>
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View style={styles.formSection}>
-        <TextInput
-          onChangeText={(text) => handleFieldChange('title', Number(text))}
-          value={newGoal.title}
-          style={styles.formFieldInput}
-        />
-      </View>
+      <GoalModalHeader handleSubmit={handleSubmit} />
+      <NameTextInput inputChange={setTitle} inputValue={title} />
       <BackgroundList bgChange={bgChange} bgIndex={bgIndex} />
       <GoalDateModal handleConfirm={setDeadlineDate} deadline={deadlineDate} />
       <GoalTextInput setGoalValue={setGoalValue} goalValue={goalValue} />
@@ -109,11 +97,7 @@ const CreateGoalBlock = (props: Props) => {
   );
 };
 
-const mapStateToProps = (state: any) => {
-  return {
-    goal: state.goal,
-  };
-};
+const mapStateToProps = (state: any) => ({goal: state.goal});
 const mapActionsToProps = {
   addGoal,
   editGoal,

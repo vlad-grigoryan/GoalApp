@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {TouchableOpacity} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {ScrollView, View} from 'react-native';
 import styles from './styles';
 import {initialGoal} from '../../initialData';
 import {
@@ -16,6 +15,7 @@ import GoalDateModal from '../../components/GoalDateModal';
 import BackgroundList from '../../components/BackgroundList';
 import NameTextInput from '../../components/NameTextInput';
 import GoalModalHeader from '../../components/GoalModalHeader';
+import DeleteGoalBlock from '../../components/DeleteGoalBlock';
 
 interface Props {
   goal: {
@@ -44,7 +44,6 @@ const CreateGoalBlock = (props: Props) => {
   const [bgIndex, setBgIndex] = useState<number>(0);
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [title, setTitle] = useState<string>(selectedGoalData.title);
-
   useEffect(() => {
     if (props.goal.selectedGoal && props.editableGoal) {
       setNewGoal(props.goal.selectedGoal);
@@ -84,16 +83,19 @@ const CreateGoalBlock = (props: Props) => {
     }
   };
   return (
-    <>
-      <GoalModalHeader handleSubmit={handleSubmit} />
-      <NameTextInput inputChange={setTitle} inputValue={title} />
-      <BackgroundList bgChange={bgChange} bgIndex={bgIndex} />
-      <GoalDateModal handleConfirm={setDeadlineDate} deadline={deadlineDate} />
-      <GoalTextInput setGoalValue={setGoalValue} goalValue={goalValue} />
-      <TouchableOpacity style={styles.bottomSection} onPress={handleRemoveItem}>
-        <Icon name="trash-o" style={styles.deleteIcon} />
-      </TouchableOpacity>
-    </>
+    <View style={styles.modalBody}>
+      <ScrollView>
+        <GoalModalHeader handleSubmit={handleSubmit} />
+        <NameTextInput inputChange={setTitle} inputValue={title} />
+        <BackgroundList bgChange={bgChange} bgIndex={bgIndex} />
+        <GoalDateModal
+          handleConfirm={setDeadlineDate}
+          deadline={deadlineDate}
+        />
+        <GoalTextInput setGoalValue={setGoalValue} goalValue={goalValue} />
+      </ScrollView>
+      <DeleteGoalBlock handleRemoveItem={handleRemoveItem} />
+    </View>
   );
 };
 

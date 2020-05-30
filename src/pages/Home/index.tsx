@@ -90,14 +90,10 @@ const Home: React.FC<Props> = (props: Props) => {
           transparent={true}
           visible={showModal}
           onRequestClose={() => setModalVisibility(false)}>
-          <View style={styles.modalBody}>
-            <ScrollView>
-              <CreateGoalBlock
-                editableGoal={editableGoal}
-                setModalVisibility={setModalVisibility}
-              />
-            </ScrollView>
-          </View>
+          <CreateGoalBlock
+            editableGoal={editableGoal}
+            setModalVisibility={setModalVisibility}
+          />
         </Modal>
         <AddingGoalButton handlePlus={handlePlus} />
       </View>

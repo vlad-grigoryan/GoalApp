@@ -8,7 +8,7 @@ import {
 import React from 'react';
 import styles from './styles';
 import {GoalBlockInterface} from '../../interfaces';
-import GoalBlock from '../GoaItem';
+import GoalBlock from '../GoalBlock';
 import {centralizedWidth, deviceWidth, goalItemWidth} from '../../utils';
 
 interface Props {

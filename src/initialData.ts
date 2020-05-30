@@ -60,7 +60,6 @@ export const backgrounds: BackgroundModel[] = [
 
 export const goalsData = [
   {
-    id: 0,
     title: 'For Smoothie',
     deadline: new Date(),
     goal: 112000,
@@ -68,7 +67,6 @@ export const goalsData = [
     bgIndex: 0,
   },
   {
-    id: 1,
     title: 'For Second Smoothie',
     deadline: new Date(),
     goal: 250000,
@@ -78,7 +76,6 @@ export const goalsData = [
 ];
 
 export const initialGoal = {
-  id: 0,
   title: 'new Goal',
   deadline: new Date(),
   goal: 5000,

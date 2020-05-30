@@ -18,7 +18,6 @@ export interface ReducerState {
 }
 
 export interface GoalBlockInterface {
-  id: number;
   title: string;
   deadline: Date;
   goal: number;

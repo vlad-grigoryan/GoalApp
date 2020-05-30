@@ -3,7 +3,6 @@ import {
   deviceHeight,
   goalItemHeight,
   deviceWidth,
-  goalItemWrapper,
   centralizedWidth,
 } from '../../utils';
 
@@ -35,16 +34,6 @@ const styles = StyleSheet.create({
     paddingLeft: centralizedWidth,
     paddingRight: centralizedWidth,
     flexDirection: 'row',
-  },
-  modalBody: {
-    backgroundColor: 'white',
-    height: goalItemWrapper,
-    bottom: 10,
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    borderTopLeftRadius: 32,
-    borderTopRightRadius: 32,
   },
   goalWrapper: {
     color: 'white',

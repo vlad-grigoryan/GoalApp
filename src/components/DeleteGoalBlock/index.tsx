@@ -24,11 +24,15 @@ const DeleteGoalBlock = ({handleRemoveItem}: Props) => {
     };
   }, []);
   return (
-    <View style={(styles.bottomSection, {bottom: btnLocation})}>
-      <TouchableOpacity style={styles.bottomButton} onPress={handleRemoveItem}>
-        <Icon name="trash-o" style={styles.deleteIcon} />
-      </TouchableOpacity>
-    </View>
+    <>
+      <View style={{...styles.bottomSection, bottom: btnLocation}}>
+        <TouchableOpacity
+          style={styles.bottomButton}
+          onPress={handleRemoveItem}>
+          <Icon name="trash-o" style={styles.deleteIcon} />
+        </TouchableOpacity>
+      </View>
+    </>
   );
 };
 

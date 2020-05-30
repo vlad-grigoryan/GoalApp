@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {ScrollView, View} from 'react-native';
+import {Keyboard, ScrollView, View} from 'react-native';
 import styles from './styles';
 import {initialGoal} from '../../initialData';
 import {
@@ -32,10 +32,12 @@ interface Props {
 }
 
 const CreateGoalBlock = (props: Props) => {
+  let keyboardDidShowListener: any, keyboardDidHideListener: any;
   const selectedGoalData = props.editableGoal
     ? props.goal.selectedGoal
     : initialGoal;
 
+  const [keyboardOpened, setKeyboardOpened] = useState<boolean>(false);
   const [newGoal, setNewGoal] = useState<GoalBlockInterface>(selectedGoalData);
   const [deadlineDate, setDeadlineDate] = useState(selectedGoalData.deadline);
   const [goalValue, setGoalValue] = useState<string>(
@@ -44,6 +46,20 @@ const CreateGoalBlock = (props: Props) => {
   const [bgIndex, setBgIndex] = useState<number>(0);
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [title, setTitle] = useState<string>(selectedGoalData.title);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardOpened(true);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardOpened(false);
+    });
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
   useEffect(() => {
     if (props.goal.selectedGoal && props.editableGoal) {
       setNewGoal(props.goal.selectedGoal);
@@ -65,7 +81,6 @@ const CreateGoalBlock = (props: Props) => {
     if (props.editableGoal) {
       props.editGoal(selectedGoal);
     } else {
-      selectedGoal.id = props.goal.goals.length;
       props.addGoal(selectedGoal);
     }
     props.setModalVisibility(false);
@@ -83,17 +98,20 @@ const CreateGoalBlock = (props: Props) => {
     }
   };
   return (
-    <View style={styles.modalBody}>
-      <ScrollView>
-        <GoalModalHeader handleSubmit={handleSubmit} />
-        <NameTextInput inputChange={setTitle} inputValue={title} />
-        <BackgroundList bgChange={bgChange} bgIndex={bgIndex} />
-        <GoalDateModal
-          handleConfirm={setDeadlineDate}
-          deadline={deadlineDate}
-        />
-        <GoalTextInput setGoalValue={setGoalValue} goalValue={goalValue} />
-      </ScrollView>
+    <View style={styles.modalContainer}>
+      <View style={styles.modalBody}>
+        <ScrollView>
+          <GoalModalHeader handleSubmit={handleSubmit} />
+          <NameTextInput inputChange={setTitle} inputValue={title} />
+          <BackgroundList bgChange={bgChange} bgIndex={bgIndex} />
+          <GoalDateModal
+            handleConfirm={setDeadlineDate}
+            deadline={deadlineDate}
+          />
+          <GoalTextInput setGoalValue={setGoalValue} goalValue={goalValue} />
+          {keyboardOpened && <View style={styles.additionalBlock} />}
+        </ScrollView>
+      </View>
       <DeleteGoalBlock handleRemoveItem={handleRemoveItem} />
     </View>
   );

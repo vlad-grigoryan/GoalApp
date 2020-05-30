@@ -3,10 +3,10 @@ import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
   bottomSection: {
     position: 'absolute',
-    left: 20,
+    left: 0,
     right: 0,
     bottom: 0,
-    minHeight: 100,
+    // minHeight: 50,
     backgroundColor: 'rgba(249, 249, 249, 0.94)',
   },
   bottomButton: {

@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
   },
   formFieldSecondRow: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   formFieldValue: {
     color: '#A6A6AB',

@@ -6,22 +6,34 @@ import Background from './../Background';
 import styles from './styles';
 import {backgrounds} from '../../initialData';
 import {formatDate} from '../../utils';
-import {GoalBlockInterface} from '../../interfaces';
 
+interface Props {
+  title: string;
+  deadline: Date;
+  goal: number;
+  current: number;
+  bgIndex: number;
+  showModal: boolean;
+}
 const GoalBlock = ({
   title,
   deadline,
   current,
   goal,
   bgIndex,
-}: GoalBlockInterface) => {
+  showModal,
+}: Props) => {
   return (
     <View style={styles.itemWrapper}>
       <View style={styles.item}>
         <Background {...backgrounds[bgIndex]} />
         <View style={styles.deadline}>
-          <Icon name="piggy-bank" style={styles.deadlineIcon} />
-          <Text style={styles.deadlineText}>until {formatDate(deadline)}</Text>
+          {!showModal && <Icon name="piggy-bank" style={styles.deadlineIcon} />}
+          {!showModal && (
+            <Text style={styles.deadlineText}>
+              until {formatDate(deadline)}
+            </Text>
+          )}
         </View>
         <View>
           <Text style={styles.title}>{title}</Text>

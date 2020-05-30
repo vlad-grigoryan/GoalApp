@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {View, ScrollView, Text, Modal} from 'react-native';
+import {View, Text, Modal} from 'react-native';
 import {connect} from 'react-redux';
 
 import Header from '../../components/Header';
@@ -82,6 +82,7 @@ const Home: React.FC<Props> = (props: Props) => {
           openEditFormModal={openEditFormModal}
           scrollRef={scrollRef}
           goalBlocks={goals}
+          showModal={showModal}
         />
       )}
       <View style={styles.bottomContainer}>
@@ -95,7 +96,9 @@ const Home: React.FC<Props> = (props: Props) => {
             setModalVisibility={setModalVisibility}
           />
         </Modal>
-        <AddingGoalButton handlePlus={handlePlus} />
+        {goals && goals.length ? (
+          <AddingGoalButton handlePlus={handlePlus} />
+        ) : null}
       </View>
     </View>
   );

@@ -17,6 +17,7 @@ interface Props {
   openEditFormModal: (goalItem: GoalBlockInterface, index: number) => void;
   scrollRef: any;
   goalBlocks: GoalBlockInterface[];
+  showModal: boolean;
 }
 const GoalBlockList = ({
   setCurrentIndex,
@@ -24,6 +25,7 @@ const GoalBlockList = ({
   openEditFormModal,
   scrollRef,
   goalBlocks,
+  showModal,
 }: Props) => {
   const handleScrollGoalBlock = ({
     nativeEvent,
@@ -48,10 +50,10 @@ const GoalBlockList = ({
         <View style={styles.goalItems}>
           {goalBlocks.map((goalItem: GoalBlockInterface, index: number) => (
             <TouchableHighlight
-              key={goalItem.id}
+              key={index}
               underlayColor={'transparent'}
               onPress={() => openEditFormModal(goalItem, index)}>
-              <GoalBlock {...goalItem} key={index} />
+              <GoalBlock {...goalItem} key={index} showModal={showModal} />
             </TouchableHighlight>
           ))}
         </View>
